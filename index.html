@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            max-width: 500px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        select:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .loading, .error, .success {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .loading {
+            color: #667eea;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            color: #e74c3c;
+            background: #fee;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .success {
+            color: #27ae60;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .required {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Agendar Cita</h1>
+            <p>Completa el formulario para reservar tu cita</p>
+        </div>
+        
+        <div class="content">
+            <!-- Loading State -->
+            <div id="loadingState">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando fechas disponibles...</p>
+                </div>
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorState" class="hidden">
+                <div class="error">
+                    <p><strong>❌ Error</strong></p>
+                    <p id="errorMessage"></p>
+                </div>
+            </div>
+            
+            <!-- Form -->
+            <form id="citaForm" class="hidden">
+                <div class="form-group">
+                    <label for="nombre">Nombre completo <span class="required">*</span></label>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Juan Pérez">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Correo electrónico <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required placeholder="juan@ejemplo.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefono">Teléfono <span class="required">*</span></label>
+                    <input type="tel" id="telefono" name="telefono" required placeholder="+34 612 345 678">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fecha">Fecha <span class="required">*</span></label>
+                    <select id="fecha" name="fecha" required>
+                        <option value="">Selecciona una fecha</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hora">Hora <span class="required">*</span></label>
+                    <select id="hora" name="hora" required disabled>
+                        <option value="">Primero selecciona una fecha</option>
+                    </select>
+                </div>
+                
+                <button type="submit" id="submitBtn">Confirmar Cita</button>
+            </form>
+            
+            <!-- Success State -->
+            <div id="successState" class="hidden">
+                <div class="success">
+                    <div class="success-icon">✅</div>
+                    <h2>¡Cita Agendada!</h2>
+                    <p>Recibirás una confirmación por WhatsApp en breve.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔧 CONFIGURACIÓN - REEMPLAZA CON TUS URLs DE N8N
+        const CONFIG = {
+            WEBHOOK_GET_SLOTS: 'https://TU-INSTANCIA.app.n8n.cloud/webhook/slots-disponibles',
+            WEBHOOK_POST_CITA: 'https://TU-INSTANCIA.app.n8n.cloud/webhook/formulario-cita'
+        };
+        
+        let slotsDisponibles = {};
+        
+        // Elementos del DOM
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        const form = document.getElementById('citaForm');
+        const successState = document.getElementById('successState');
+        const selectFecha = document.getElementById('fecha');
+        const selectHora = document.getElementById('hora');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Obtener parámetro 'id' de la URL (token de sesión)
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionToken = urlParams.get('id');
+        
+        // Cargar slots disponibles
+        async function cargarSlots() {
+            try {
+                const response = await fetch(CONFIG.WEBHOOK_GET_SLOTS);
+                
+                if (!response.ok) {
+                    throw new Error('Error al obtener disponibilidad');
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success || !data.slots) {
+                    throw new Error('No hay slots disponibles');
+                }
+                
+                slotsDisponibles = data.slots;
+                
+                // Verificar que haya al menos un slot
+                if (Object.keys(slotsDisponibles).length === 0) {
+                    throw new Error('No hay fechas disponibles en este momento');
+                }
+                
+                // Llenar el select de fechas
+                Object.keys(slotsDisponibles).sort().forEach(fecha => {
+                    const option = document.createElement('option');
+                    option.value = fecha;
+                    option.textContent = formatearFecha(fecha);
+                    selectFecha.appendChild(option);
+                });
+                
+                // Mostrar formulario
+                mostrarFormulario();
+                
+            } catch (error) {
+                mostrarError(error.message);
+            }
+        }
+        
+        // Cuando selecciona una fecha, cargar las horas
+        selectFecha.addEventListener('change', function() {
+            const fecha = this.value;
+            
+            // Limpiar horas anteriores
+            selectHora.innerHTML = '<option value="">Selecciona una hora</option>';
+            selectHora.disabled = false;
+            
+            // Llenar con horas disponibles
+            if (slotsDisponibles[fecha]) {
+                slotsDisponibles[fecha].forEach(hora => {
+                    const option = document.createElement('option');
+                    option.value = hora;
+                    option.textContent = hora;
+                    selectHora.appendChild(option);
+                });
+            }
+        });
+        
+        // Enviar formulario
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+            
+            const formData = {
+                sessionToken: sessionToken,
+                nombre: document.getElementById('nombre').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                fecha: document.getElementById('fecha').value,
+                hora: document.getElementById('hora').value
+            };
+            
+            try {
+                const response = await fetch(CONFIG.WEBHOOK_POST_CITA, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al agendar la cita');
+                }
+                
+                mostrarExito();
+                
+            } catch (error) {
+                alert('Error al agendar la cita. Por favor intenta de nuevo.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Confirmar Cita';
+            }
+        });
+        
+        // Funciones de UI
+        function mostrarFormulario() {
+            loadingState.classList.add('hidden');
+            errorState.classList.add('hidden');
+            form.classList.remove('hidden');
+        }
+        
+        function mostrarError(mensaje) {
+            loadingState.classList.add('hidden');
+            form.classList.add('hidden');
+            errorMessage.textContent = mensaje;
+            errorState.classList.remove('hidden');
+        }
+        
+        function mostrarExito() {
+            form.classList.add('hidden');
+            successState.classList.remove('hidden');
+        }
+        
+        // Formatear fecha para mostrar
+        function formatearFecha(fecha) {
+            const [year, month, day] = fecha.split('-');
+            const fechaObj = new Date(year, month - 1, day);
+            const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            
+            return `${dias[fechaObj.getDay()]} ${day} de ${meses[parseInt(month) - 1]}`;
+        }
+        
+        // Iniciar carga de slots al cargar la página
+        cargarSlots();
+    </script>
+</body>
+</html>
