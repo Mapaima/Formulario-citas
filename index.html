@@ -63,7 +63,7 @@
             font-size: 14px;
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
@@ -73,7 +73,12 @@
             font-family: inherit;
         }
         
-        input:focus, select:focus {
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -210,6 +215,11 @@
                     </select>
                 </div>
                 
+                <div class="form-group">
+                    <label for="motivo">Motivo consulta <span class="required">*</span></label>
+                    <textarea id="motivo" name="motivo" required placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
+                </div>
+                
                 <button type="submit" id="submitBtn">Confirmar Cita</button>
             </form>
             
@@ -317,6 +327,7 @@
                 email: document.getElementById('email').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
                 fecha: document.getElementById('fecha').value,
+                motivo: document.getElementById('motivo').value.trim(),
                 hora: document.getElementById('hora').value
             };
             
