@@ -253,9 +253,9 @@
         const selectHora = document.getElementById('hora');
         const submitBtn = document.getElementById('submitBtn');
         
-        // Obtener parámetro 'id' de la URL (remoteJid)
+        // Obtener parámetro 'remoteJid' de la URL
         const urlParams = new URLSearchParams(window.location.search);
-        const remoteJid = urlParams.get('id');
+        const remoteJid = urlParams.get('remoteJid') || urlParams.get('id') || '';
         
         // Cargar slots disponibles
         async function cargarSlots() {
