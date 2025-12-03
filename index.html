@@ -253,9 +253,9 @@
         const selectHora = document.getElementById('hora');
         const submitBtn = document.getElementById('submitBtn');
         
-        // Obtener parámetro 'id' de la URL (token de sesión)
+        // Obtener parámetro 'id' de la URL (remoteJid)
         const urlParams = new URLSearchParams(window.location.search);
-        const sessionToken = urlParams.get('id');
+        const remoteJid = urlParams.get('id');
         
         // Cargar slots disponibles
         async function cargarSlots() {
@@ -321,14 +321,15 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Enviando...';
             
+            // Preparar datos del formulario incluyendo remoteJid
             const formData = {
-                sessionToken: sessionToken,
+                remoteJid: remoteJid || '', // Campo oculto
                 nombre: document.getElementById('nombre').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
                 fecha: document.getElementById('fecha').value,
-                motivo: document.getElementById('motivo').value.trim(),
-                hora: document.getElementById('hora').value
+                hora: document.getElementById('hora').value,
+                motivo: document.getElementById('motivo').value.trim()
             };
             
             try {
