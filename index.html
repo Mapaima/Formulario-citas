@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Cita</title>
+    <title>Agendar Cita | Mapaima</title>
+    <!-- Google Fonts: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Mapaima Premium Palette */
+            --primary-color: #2979ff;
+            --primary-dark: #1565c0;
+            --secondary-color: #1a1f36;
+            --accent-cyan: #00e5ff;
+            --background-dark: #0a0e17;
+            --surface-color: #111827;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-bg: rgba(17, 24, 39, 0.7);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,39 +28,60 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--background-dark);
+            /* Fondo radial premium Mapaima */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(41, 121, 255, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 229, 255, 0.05) 0%, transparent 25%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            color: var(--text-primary);
         }
         
         .container {
-            background: white;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             max-width: 500px;
             width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             overflow: hidden;
+            position: relative;
+        }
+        
+        /* Barra superior decorativa */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-cyan));
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
+            padding: 40px 30px 20px;
             text-align: center;
         }
         
         .header h1 {
             font-size: 28px;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, white 0%, #b0b0b0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
         .header p {
-            opacity: 0.9;
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
         }
         
         .content {
@@ -58,19 +95,42 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
+            color: var(--text-secondary);
+            font-weight: 500;
             font-size: 14px;
         }
         
+        .required {
+            color: var(--accent-cyan);
+        }
+        
+        /* Mapaima Input Styles */
         input, select, textarea {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             font-size: 15px;
-            transition: border-color 0.3s;
+            color: white;
             font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            background: rgba(41, 121, 255, 0.05);
+            box-shadow: 0 0 0 4px rgba(41, 121, 255, 0.1);
+        }
+        
+        /* Estilar placeholder */
+        ::placeholder { color: rgba(255, 255, 255, 0.3); }
+        
+        /* Select negro para las opciones */
+        option {
+            background: var(--surface-color);
+            color: white;
         }
         
         textarea {
@@ -78,54 +138,53 @@
             resize: vertical;
         }
         
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
         select:disabled {
-            background: #f5f5f5;
+            background: rgba(255, 255, 255, 0.02);
+            opacity: 0.5;
             cursor: not-allowed;
         }
         
         button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(41, 121, 255, 0.3);
+            margin-top: 10px;
         }
         
         button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 25px rgba(41, 121, 255, 0.5);
+            filter: brightness(1.1);
         }
         
         button:disabled {
             opacity: 0.6;
-            cursor: not-allowed;
+            cursor: wait;
+            background: var(--text-secondary);
+            box-shadow: none;
         }
         
+        /* Estados */
         .loading, .error, .success {
             text-align: center;
             padding: 20px;
         }
         
-        .loading {
-            color: #667eea;
-        }
+        .loading { color: var(--primary-color); }
         
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary-color);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
@@ -136,35 +195,32 @@
         }
         
         .error {
-            color: #e74c3c;
-            background: #fee;
-            border-radius: 10px;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
             padding: 15px;
         }
         
         .success {
-            color: #27ae60;
+            color: white;
         }
         
         .success-icon {
             font-size: 60px;
             margin-bottom: 20px;
+            display: block;
         }
         
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
         
-        .required {
-            color: #e74c3c;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>📅 Agendar Cita</h1>
-            <p>Completa el formulario para reservar tu cita</p>
+            <p>Rellena tus datos para cerrar tu sesión estratégica con Mapaima.</p>
         </div>
         
         <div class="content">
@@ -172,15 +228,15 @@
             <div id="loadingState">
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>Cargando fechas disponibles...</p>
+                    <p>Conectando con el calendario...</p>
                 </div>
             </div>
             
             <!-- Error State -->
             <div id="errorState" class="hidden">
                 <div class="error">
-                    <p><strong>❌ Error</strong></p>
-                    <p id="errorMessage"></p>
+                    <p><strong>⚠️ Hubo un problema</strong></p>
+                    <p id="errorMessage" style="opacity: 0.8; font-size: 0.9em; margin-top: 5px;"></p>
                 </div>
             </div>
             
@@ -188,17 +244,17 @@
             <form id="citaForm" class="hidden">
                 <div class="form-group">
                     <label for="nombre">Nombre completo <span class="required">*</span></label>
-                    <input type="text" id="nombre" name="nombre" required placeholder="Juan Pérez">
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ej. Juan Pérez">
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Correo electrónico <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required placeholder="juan@ejemplo.com">
+                    <input type="email" id="email" name="email" required placeholder="juan@empresa.com">
                 </div>
                 
                 <div class="form-group">
                     <label for="telefono">Teléfono <span class="required">*</span></label>
-                    <input type="tel" id="telefono" name="telefono" required placeholder="+34 612 345 678">
+                    <input type="tel" id="telefono" name="telefono" required placeholder="+34 600 000 000">
                 </div>
                 
                 <div class="form-group">
@@ -217,7 +273,7 @@
                 
                 <div class="form-group">
                     <label for="motivo">Motivo consulta <span class="required">*</span></label>
-                    <textarea id="motivo" name="motivo" required placeholder="Describe brevemente el motivo de tu consulta..."></textarea>
+                    <textarea id="motivo" name="motivo" required placeholder="¿En qué podemos ayudarte?"></textarea>
                 </div>
                 
                 <button type="submit" id="submitBtn">Confirmar Cita</button>
@@ -227,8 +283,8 @@
             <div id="successState" class="hidden">
                 <div class="success">
                     <div class="success-icon">✅</div>
-                    <h2>¡Cita Agendada!</h2>
-                    <p>Recibirás una confirmación por WhatsApp en breve.</p>
+                    <h2 style="margin-bottom: 10px;">¡Reserva Confirmada!</h2>
+                    <p style="color: var(--text-secondary);">Recibirás la confirmación por WhatsApp en breve.</p>
                 </div>
             </div>
         </div>
@@ -253,7 +309,7 @@
         const selectHora = document.getElementById('hora');
         const submitBtn = document.getElementById('submitBtn');
         
-        // Obtener parámetro 'remoteJid' de la URL
+        // Obtener parámetro 'remoteJid' de la URL (Para el Chatbot)
         const urlParams = new URLSearchParams(window.location.search);
         const remoteJid = urlParams.get('remoteJid') || urlParams.get('id') || '';
         
@@ -319,11 +375,11 @@
             e.preventDefault();
             
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Enviando...';
+            submitBtn.textContent = 'Procesando reserva...';
             
             // Preparar datos del formulario incluyendo remoteJid
             const formData = {
-                remoteJid: remoteJid || '', // Campo oculto
+                remoteJid: remoteJid || '', // Campo clave para el chatbot
                 nombre: document.getElementById('nombre').value.trim(),
                 email: document.getElementById('email').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
@@ -348,7 +404,7 @@
                 mostrarExito();
                 
             } catch (error) {
-                alert('Error al agendar la cita. Por favor intenta de nuevo.');
+                alert('Hubo un error al conectar. Por favor intenta de nuevo.');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Confirmar Cita';
             }
@@ -383,7 +439,7 @@
             return `${dias[fechaObj.getDay()]} ${day} de ${meses[parseInt(month) - 1]}`;
         }
         
-        // Iniciar carga de slots al cargar la página
+        // Iniciar carga
         cargarSlots();
     </script>
 </body>
