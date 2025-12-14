@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Cita | Mapaima</title>
     <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Mapaima Premium Palette */
@@ -18,7 +18,7 @@
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-bg: rgba(17, 24, 39, 0.7);
+            --glass-bg: rgba(17, 24, 39, 0.75);
         }
 
         * {
@@ -68,14 +68,26 @@
             padding: 40px 30px 20px;
             text-align: center;
         }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, white 0%, #b0b0b0 100%);
+
+        /* LOGO MAPAIMA AÑADIDO */
+        .brand-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-cyan));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 600;
         }
         
         .header p {
@@ -85,7 +97,7 @@
         }
         
         .content {
-            padding: 30px;
+            padding: 0 30px 30px;
         }
         
         .form-group {
@@ -124,10 +136,8 @@
             box-shadow: 0 0 0 4px rgba(41, 121, 255, 0.1);
         }
         
-        /* Estilar placeholder */
         ::placeholder { color: rgba(255, 255, 255, 0.3); }
         
-        /* Select negro para las opciones */
         option {
             background: var(--surface-color);
             color: white;
@@ -189,10 +199,7 @@
             margin: 0 auto 15px;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
         .error {
             color: #ef4444;
@@ -202,9 +209,7 @@
             padding: 15px;
         }
         
-        .success {
-            color: white;
-        }
+        .success { color: white; }
         
         .success-icon {
             font-size: 60px;
@@ -213,14 +218,15 @@
         }
         
         .hidden { display: none; }
-        
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <!-- LOGO AÑADIDO AQUÍ -->
+            <div class="brand-logo">MAPAIMA</div>
             <h1>📅 Agendar Cita</h1>
-            <p>Rellena tus datos para cerrar tu sesión estratégica con Mapaima.</p>
+            <p>Rellena tus datos para cerrar tu sesión estratégica.</p>
         </div>
         
         <div class="content">
